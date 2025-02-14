@@ -1,0 +1,31 @@
+---
+- name: Créer un dossier pour Vaultwarden
+  file:
+    path: /opt/vaultwarden
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Déployer Vaultwarden avec Docker-Compose
+  copy:
+    dest: /opt/vaultwarden/docker-compose.yml
+    content: |
+      version: '3'
+      services:
+        vaultwarden:
+          image: vaultwarden/server:latest
+          container_name: vaultwarden
+          restart: unless-stopped
+          ports:
+            - "80:80"
+            - "443:443"
+          volumes:
+            - ./data:/data
+          environment:
+            - ADMIN_TOKEN=supersecurise
+
+- name: Lancer Vaultwarden
+  command: docker-compose up -d
+  args:
+    chdir: /opt/vaultwarden

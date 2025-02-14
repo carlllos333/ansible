@@ -1,0 +1,93 @@
+---
+
+    # 2. Créer des bases de données MySQL pour chaque application
+    - name: Créer la base de données FileGator
+      mysql_db:
+        name: filegator
+        state: present
+        login_password: rootpassword
+        login_user: root
+
+    - name: Créer la base de données FreshRSS
+      mysql_db:
+        name: freshrss
+        state: present
+        login_password: rootpassword
+        login_user: root
+
+    - name: Créer la base de données GLPI
+      mysql_db:
+        name: glpi
+        state: present
+        login_password: rootpassword
+        login_user: root
+
+    - name: Créer la base de données Nextcloud
+      mysql_db:
+        name: nextcloudvvvvvvv
+        state: present
+        login_password: rootpassword
+        login_user: root
+
+    # 3. Télécharger et configurer les applications
+    - name: Télécharger et extraire FileGator
+      unarchive:
+        src: "https://github.com/filegator/filegator/releases/download/v7.0.0/filegator-7.0.0.zip"
+        dest: /var/www/filegator
+        remote_src: yes
+
+    - name: Télécharger et extraire FreshRSS
+      unarchive:
+        src: "https://github.com/FreshRSS/FreshRSS/releases/download/1.18.0/FreshRSS-1.18.0.zip"
+        dest: /var/www/freshrss
+        remote_src: yes
+
+    - name: Télécharger et extraire GLPI
+      unarchive:
+        src: "https://github.com/glpi-project/glpi/releases/download/10.0.0/glpi-10.0.0.tar.gz"
+        dest: /var/www/glpi
+        remote_src: yes
+
+    - name: Télécharger et extraire Nextcloud
+      unarchive:
+        src: "https://download.nextcloud.com/server/releases/nextcloud-23.0.0.tar.bz2"
+        dest: /var/www/nextcloud
+        remote_src: yes
+
+    # 4. Configurer les VirtualHosts pour Apache
+    - name: Configurer le VHost pour FileGator
+      template:
+        src: "vhost_filegator.conf.j2"
+        dest: "/etc/apache2/sites-available/filegator.conf"
+
+    - name: Configurer le VHost pour FreshRSS
+      template:
+        src: "vhost_freshrss.conf.j2"
+        dest: "/etc/apache2/sites-available/freshrss.conf"
+
+    - name: Configurer le VHost pour GLPI
+      template:
+        src: "vhost_glpi.conf.j2"
+        dest: "/etc/apache2/sites-available/glpi.conf"
+
+    - name: Configurer le VHost pour Nextcloud
+      template:
+        src: "vhost_nextcloud.conf.j2"
+        dest: "/etc/apache2/sites-available/nextcloud.conf"
+
+    # 5. Activer les VHosts
+    - name: Activer les sites
+      apache2_site:
+        name: "{{ item }}"
+        state: enabled
+      loop:
+        - filegator.conf
+        - freshrss.conf
+        - glpi.conf
+        - nextcloud.conf
+
+    # 6. Redémarrer Apache pour appliquer les changements
+    - name: Redémarrer Apache
+      service:
+        name: apache2
+        state: restarted

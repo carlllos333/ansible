@@ -1,0 +1,6 @@
+---
+- name: installation d'Apache
+  include_tasks: install_apache.yml
+
+- name: installation vhost apache
+  include_tasks: install_vhost_apache.yml

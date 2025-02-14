@@ -3,6 +3,7 @@
   apt:
     update_cache: yes
     upgrade: yes
+
 - name: Installation des dépandances
     apt:
     name: "{{ packages }}"
@@ -31,6 +32,7 @@
     name: rss
     state: present
     login_unix_socket: /var/run/mysqld/mysqld.sock
+
 - name: Création de l'utilisateur pour la base de donnée
   mysql_user:
     name: rssusr
@@ -38,6 +40,7 @@
     priv: 'rss.*:ALL'
     state: present
     login_unix_socket: /var/run/mysqld/mysqld.sock
+
 - name: Téléchargement de freshRSS
   git:
     repo: 'https://github.com/FreshRSS/FreshRSS.git'
@@ -52,6 +55,7 @@
     group: www-data
     mode: '0755'
     recurse: yes
+
 - name: Activation des modues apache
   apache2_module:
     state: present
@@ -61,6 +65,7 @@
     - deflate
     - headers
     - ssl
+
 - name: Activer et démarrer apache2
   systemd:
     name: apache2

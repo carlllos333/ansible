@@ -1,0 +1,7 @@
+
+#variables wordpress
+db_name: wordpress
+db_user: carlos
+db_password: Password123!
+wordpress_url: "https://wordpress.org/latest.tar.gz"
+

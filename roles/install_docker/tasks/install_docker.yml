@@ -3,6 +3,7 @@
   apt:
     update_cache: yes
     upgrade: yes
+
 - name: Installer des dépandances
   apt:
     name: "{{ packages }}"
@@ -11,11 +12,13 @@
     packages:
     - docker
     - docker-compose
+
 - name: Activer et démarrer Docker
   systemd:
     name: docker
     enabled: yes
     state: started
+
 - name: installation portainer
   docker_container:
     name: portainer
@@ -27,6 +30,7 @@
     ports:
       - 8000:8000
       - 9443:9443
+      
 - name: installation NGINX PROXY MANAGER
   docker_container:
     name: npm

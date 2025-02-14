@@ -1,0 +1,33 @@
+---
+- name: Télécharger et extraire WordPress
+  unarchive:
+     src: "{{ wordpress_url }}"
+  dest: /var/www/html/
+  remote_src: yes
+  extra_opts: [--strip-components=1]
+
+- name: Changer les permissions du dossier WordPress
+  file:
+    path: /var/www/html
+    owner: www-data
+    group: www-data
+    mode: '0755'
+    recurse: yes
+
+- name: Créer une base de données MySQL pour WordPress
+  mysql_db:
+    name: "{{ db_name }}"
+    state: present
+
+- name: Créer un utilisateur MySQL pour WordPress
+  mysql_user:
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+    priv: "{{ db_name }}.*:ALL"
+    host: localhost
+    state: present
+
+- name: Redémarrer Apache
+  service:
+    name: apache2
+    state: restarted

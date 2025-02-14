@@ -1,0 +1,6 @@
+---
+- name: playbook instalation docker avec wordpress et vaultwarden
+  hosts: server_docker
+  become: yes
+  roles:
+    - role: install_docker
