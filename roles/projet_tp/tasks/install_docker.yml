@@ -1,0 +1,41 @@
+---
+- name: Mettre à jour la liste des paquets
+  apt:
+    update_cache: yes
+    upgrade: yes
+- name: Installer des dépandances
+  apt:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+    - docker
+    - docker-compose
+- name: Activer et démarrer Docker
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+- name: installation portainer
+  docker_container:
+    name: portainer
+    image: portainer/portainer-ce:2.21.5
+    restart_policy: unless-stopped
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 8000:8000
+      - 9443:9443
+- name: installation NGINX PROXY MANAGER
+  docker_container:
+    name: npm
+    image: jc21/nginx-proxy-manager:latest
+    restart_policy: unless-stopped
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    ports:
+      - 80:80
+      - 81:81
+      - 443:443

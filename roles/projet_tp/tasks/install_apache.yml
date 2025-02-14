@@ -1,0 +1,68 @@
+---
+- name: Mettre à jour la liste des paquets
+  apt:
+    update_cache: yes
+    upgrade: yes
+- name: Installation des dépandances
+    apt:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+    - apache2
+    - php
+    - php-pdo
+    - php-mysql
+    - php-zip
+    - php-gd
+    - php-mbstring
+    - php-curl
+    - php-xml
+    - php-pear
+    - php-bcmath
+    - php-json
+    - php-gmp
+    - mariadb-server
+    - git
+    - python3-pymysql
+
+- name: Création de la base de donnée
+  mysql_db:
+    name: rss
+    state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+- name: Création de l'utilisateur pour la base de donnée
+  mysql_user:
+    name: rssusr
+    password: 'P@ssw0rd'
+    priv: 'rss.*:ALL'
+    state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+- name: Téléchargement de freshRSS
+  git:
+    repo: 'https://github.com/FreshRSS/FreshRSS.git'
+    dest: /var/www/html/FreshRSS
+    version: 'edge'
+    update: yes
+- name: Ajustement des permissions de /var/www
+  file:
+    path: /var/www
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0755'
+    recurse: yes
+- name: Activation des modues apache
+  apache2_module:
+    state: present
+    name: "{{ item }}"
+  loop:
+    - rewrite
+    - deflate
+    - headers
+    - ssl
+- name: Activer et démarrer apache2
+  systemd:
+    name: apache2
+    enabled: yes
+    state: started

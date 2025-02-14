@@ -1,0 +1,6 @@
+---
+- name: playbook instalation dockeret apache
+  hosts: servers
+  become: yes
+  roles:
+    - role: projet_tp

@@ -1,0 +1,6 @@
+---
+- name: installation docker
+  include_tasks: install_docker.yml
+
+- name: installation d'Apache
+  include_tasks: install_apache.yml
