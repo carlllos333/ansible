@@ -1,0 +1,9 @@
+<VirtualHost *:80>
+    ServerAdmin webmaster@filegator.local
+    ServerName filegator.local
+    DocumentRoot /var/www/filegator
+    <Directory /var/www/filegator>
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>

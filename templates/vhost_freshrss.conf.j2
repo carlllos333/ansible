@@ -1,0 +1,9 @@
+<VirtualHost *:80>
+    ServerAdmin webmaster@freshrss.local
+    ServerName freshrss.local
+    DocumentRoot /var/www/freshrss
+    <Directory /var/www/freshrss>
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>

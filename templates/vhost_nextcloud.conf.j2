@@ -1,0 +1,9 @@
+<VirtualHost *:80>
+    ServerAdmin webmaster@nextcloud.local
+    ServerName nextcloud.local
+    DocumentRoot /var/www/nextcloud
+    <Directory /var/www/nextcloud>
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>

@@ -1,0 +1,9 @@
+<VirtualHost *:80>
+    ServerAdmin webmaster@glpi.local
+    ServerName glpi.local
+    DocumentRoot /var/www/glpi
+    <Directory /var/www/glpi>
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>

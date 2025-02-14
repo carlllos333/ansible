@@ -5,7 +5,7 @@
     upgrade: yes
 
 - name: Installation des dépandances
-    apt:
+  apt:
     name: "{{ packages }}"
     state: present
   vars:
